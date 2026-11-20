@@ -4,6 +4,7 @@ import {
   Maximize2,
   Minimize2,
   Monitor,
+  Music,
   Snowflake,
   Volume2,
   VolumeX,
@@ -23,11 +24,15 @@ interface TopBarProps {
   currentView: AppView;
   activeMode: GameMode;
   soundEnabled: boolean;
+  musicPlaying: boolean;
+  musicAwaitingGesture: boolean;
+  musicSongTitle: string;
   snowEnabled: boolean;
   limMode: boolean;
   isFullscreen: boolean;
   onNavigate: (view: AppView, quickMode?: GameMode) => void;
   onToggleSound: () => void;
+  onToggleMusic: () => void;
   onToggleSnow: () => void;
   onToggleLim: () => void;
   onToggleFullscreen: () => void;
@@ -38,11 +43,15 @@ export function TopBar({
   currentView,
   activeMode,
   soundEnabled,
+  musicPlaying,
+  musicAwaitingGesture,
+  musicSongTitle,
   snowEnabled,
   limMode,
   isFullscreen,
   onNavigate,
   onToggleSound,
+  onToggleMusic,
   onToggleSnow,
   onToggleLim,
   onToggleFullscreen,
@@ -201,6 +210,33 @@ export function TopBar({
             >
               <Snowflake className="w-3.5 h-3.5" aria-hidden="true" />
               <span>{snowEnabled ? 'Neve: Sì' : 'Neve: No'}</span>
+            </button>
+
+            <button
+              type="button"
+              data-music-toggle="true"
+              onClick={onToggleMusic}
+              aria-pressed={musicPlaying}
+              title={
+                musicPlaying
+                  ? `In riproduzione: ${musicSongTitle} (clicca per mettere in pausa)`
+                  : 'Avvia la musica natalizia di sottofondo'
+              }
+              className={toolbarBtnClass(
+                musicPlaying || musicAwaitingGesture,
+                musicPlaying
+                  ? 'bg-red-50 border-red-300 text-red-900'
+                  : 'bg-amber-50 border-amber-300 text-amber-900',
+              )}
+            >
+              <Music className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>
+                {musicPlaying
+                  ? 'Musica: Sì'
+                  : musicAwaitingGesture
+                    ? 'Avvia Musica'
+                    : 'Musica: No'}
+              </span>
             </button>
 
             <button

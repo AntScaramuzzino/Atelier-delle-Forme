@@ -38,7 +38,7 @@ export function subscribeSpeechState(
   };
 }
 
-function getAudioContext(): AudioContext | null {
+export function getAudioContext(): AudioContext | null {
   if (typeof window === 'undefined') return null;
   if (!audioCtx) {
     const Ctx =

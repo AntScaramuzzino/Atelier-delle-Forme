@@ -33,6 +33,13 @@ import {
   type ShapeId,
 } from './data/gameCatalog';
 import {
+  startChristmasMusic,
+  stopChristmasMusic,
+  subscribeMusicState,
+  toggleChristmasMusic,
+  type MusicPlaybackState,
+} from './utils/christmasMusic';
+import {
   playTapSound,
   speakAsElf,
   stopSpeaking,
@@ -101,9 +108,24 @@ export default function App() {
   const [stats, setStats] = useState<MasteryStats>(() => loadStats());
   const [heroImgFailed, setHeroImgFailed] = useState<boolean>(false);
   const [speakingTag, setSpeakingTag] = useState<string | null>(null);
+  const [musicState, setMusicState] = useState<MusicPlaybackState>({
+    enabled: true,
+    playing: false,
+    awaitingGesture: true,
+    currentSongTitle: 'Din Don Dan (Jingle Bells)',
+  });
 
   useEffect(() => {
     return subscribeSpeechState(setSpeakingTag);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribeMusicState(setMusicState);
+    startChristmasMusic();
+    return () => {
+      unsubscribe();
+      stopChristmasMusic();
+    };
   }, []);
 
   useEffect(() => {
@@ -150,6 +172,10 @@ export default function App() {
       }
       return next;
     });
+  }, []);
+
+  const handleToggleMusic = useCallback(() => {
+    toggleChristmasMusic();
   }, []);
 
   const handleToggleSnow = useCallback(() => {
@@ -282,11 +308,15 @@ export default function App() {
         currentView={view}
         activeMode={activeMode}
         soundEnabled={soundEnabled}
+        musicPlaying={musicState.playing}
+        musicAwaitingGesture={musicState.awaitingGesture}
+        musicSongTitle={musicState.currentSongTitle}
         snowEnabled={snowEnabled}
         limMode={limMode}
         isFullscreen={isFullscreen}
         onNavigate={handleNavigate}
         onToggleSound={handleToggleSound}
+        onToggleMusic={handleToggleMusic}
         onToggleSnow={handleToggleSnow}
         onToggleLim={handleToggleLim}
         onToggleFullscreen={handleToggleFullscreen}
