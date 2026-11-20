@@ -1,0 +1,8 @@
+{
+  "name": "Remix Atelier delle Forme",
+  "description": "Gioco educativo per la scuola dell\u0027infanzia dedicato al riconoscimento dei colori e delle forme geometriche.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
